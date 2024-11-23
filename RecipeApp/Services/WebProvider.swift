@@ -12,7 +12,7 @@ import UIKit
 class WebProvider {
     static let shared: WebProvider = WebProvider()
     
-    func fetchRecipes(path: URL = UrlPath.recipesUrl!) -> AnyPublisher<RecipeArray, Error> {
+    func fetchRecipes(path: URL = UrlPath.recipesUrl) -> AnyPublisher<RecipeArray, Error> {
         var request = URLRequest(url: path)
         request.httpMethod = "GET"
         request.timeoutInterval = 10
@@ -28,5 +28,5 @@ class WebProvider {
 }
 
 enum UrlPath {
-    static let recipesUrl = URL(string: "https://hf-android-app.s3-eu-west-1.amazonaws.com/android-test/recipes.json")
+    static let recipesUrl = URL(string: "https://hf-android-app.s3-eu-west-1.amazonaws.com/android-test/recipes.json")!
 }

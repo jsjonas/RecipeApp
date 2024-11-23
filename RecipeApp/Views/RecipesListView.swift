@@ -9,17 +9,32 @@ import SwiftUI
 
 struct RecipesListView: View {
     /// ViewModel handle logic and data
-    @State var viewModel: ViewModel
-    
+    @State var viewModel: RecipesListViewModel
+    @State private var selection: String? = nil
+
     var body: some View {
         NavigationStack {
             List(self.viewModel.recipesArray) { item in
-                NavigationLink(destination: DetailsView(recipe: item)) {
-                    RecipeView(recipe: item)
+                ZStack(alignment: .leading) {
+                    NavigationLink(
+                        destination: RecipeDetailsView(),
+                        tag: item.id,
+                        selection: $selection
+                    ) { EmptyView() }
+
+                    Button(action: {
+                        self.viewModel.storeItem(item: item, completion: { id in
+                            self.selection = id
+                        })
+                    }, label: {
+                        RecipeView(recipe: item)
+                    })
+
                 }
             }
             .navigationTitle("Recipes")
         }
+        .environment(viewModel)
         /// Displays a ProgressView if the list of recipes is empty
         .overlay {
             if viewModel.recipesArray.isEmpty {
@@ -53,5 +68,5 @@ struct RecipeView: View {
 }
 
 #Preview {
-    RecipesListView(viewModel: ViewModel())
+    RecipesListView(viewModel: RecipesListViewModel())
 }
